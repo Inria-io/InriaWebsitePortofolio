@@ -1,0 +1,38 @@
+---
+title: "Membangun Website Dengan Desain Neobrutalism"
+date: "2026-06-14"
+summary: "Mengapa desain neobrutalisme sangat populer dan bagaimana cara menerapkannya menggunakan Tailwind CSS."
+tags: ["Tailwind CSS", "Desain", "Web Dev"]
+cover_image: ""
+---
+
+# Membangun Website Dengan Desain Neobrutalism
+
+Neobrutalism (atau Neobrutalisme) adalah salah satu tren desain web paling populer saat ini. Terinspirasi dari arsitektur brutalisme tahun 1950-an dan dipadukan dengan estetika internet retro, gaya ini menawarkan alternatif segar dari desain web modern yang serba mulus, steril, dan homogen.
+
+## Karakteristik Utama Neobrutalisme
+
+Desain Neobrutalist memiliki ciri-ciri visual yang sangat khas dan tidak bisa dilewatkan:
+
+1. **Warna Kontras Tinggi**: Menggunakan palet warna yang cerah dan kadang tabrakan seperti kuning neon, pink elektrik, hijau stabilo, dan biru langit.
+2. **Border Hitam Tebal**: Setiap elemen (kartu, tombol, input) dibatasi oleh garis hitam pekat (`border-4 border-black`).
+3. **Shadow Kaku (Hard Drop Shadows)**: Berbeda dengan bayangan lembut (soft blur) modern, neobrutalisme menggunakan bayangan padat tanpa blur dengan offset yang jelas (`shadow-[6px_6px_0px_rgba(0,0,0,1)]`).
+4. **Tipografi Tebal & Kaku**: Judul besar menggunakan font sans-serif berbobot ekstra berat (seperti *Space Grotesk* atau *Archivo Black*) dengan case huruf kapital semua.
+
+## Implementasi dengan Tailwind CSS
+
+Menerapkan neobrutalisme di Tailwind CSS sebenarnya sangat mudah karena utilitasnya yang berbasis kelas (utility-first).
+
+Contoh pembuatan tombol Neobrutalist yang interaktif:
+
+```html
+<button class="bg-[#FFDE4D] text-black font-bold uppercase px-6 py-3 border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] active:translate-x-0.5 active:translate-y-0.5 active:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all">
+  Mulai Sekarang
+</button>
+```
+
+Ketika tombol di atas di-hover, posisinya bergeser sedikit ke atas-kiri dan bayangannya menebal. Saat di-klik, posisinya turun ke bawah-kanan dan bayangannya menipis. Ini menciptakan efek taktil kaku yang sangat memuaskan!
+
+## Kesimpulan
+
+Neobrutalisme adalah cara terbaik jika Anda ingin membuat website portofolio atau brand digital Anda menonjol dan diingat oleh pengunjung. Dengan Tailwind CSS dan sedikit kreativitas, Anda bisa mendesain UI yang berani dan fungsional.
