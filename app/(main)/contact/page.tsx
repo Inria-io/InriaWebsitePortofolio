@@ -2,7 +2,7 @@
 
 import React from "react";
 import { MessageSquareCode, Mail, MapPin } from "lucide-react";
-import { GithubIcon as Github, LinkedinIcon as Linkedin, InstagramIcon as Instagram, YoutubeIcon as Youtube } from "@/components/ui/icons";
+import { GithubIcon as Github, LinkedinIcon as Linkedin, InstagramIcon as Instagram } from "@/components/ui/icons";
 import Link from "next/link";
 import { Card } from "@/components/ui/card";
 import { ContactForm } from "@/components/sections/contact-form";
@@ -29,7 +29,6 @@ export default function ContactPage() {
     { name: "Github", href: "https://github.com/Inria-io", icon: <Github className="w-6 h-6" />, color: "hover:bg-neo-yellow" },
     { name: "LinkedIn", href: "https://www.linkedin.com/in/inriaaltjekalalo/", icon: <Linkedin className="w-6 h-6" />, color: "hover:bg-neo-blue" },
     { name: "Instagram", href: "https://www.instagram.com/inriakalalo?igsh=MTMwaHpwazB5dHp5cA%3D%3D&utm_source=qr", icon: <Instagram className="w-6 h-6 text-black dark:text-white dark:hover:text-black" />, color: "hover:bg-neo-pink" },
-    { name: "YouTube", href: "https://www.youtube.com/@inriakalalo", icon: <Youtube className="w-6 h-6 text-black dark:text-white dark:hover:text-black" />, color: "hover:bg-neo-orange" },
   ];
 
   return (

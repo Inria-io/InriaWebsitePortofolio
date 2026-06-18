@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { Mail } from "lucide-react";
-import { GithubIcon as Github, LinkedinIcon as Linkedin, InstagramIcon as Instagram, YoutubeIcon as Youtube } from "@/components/ui/icons";
+import { GithubIcon as Github, LinkedinIcon as Linkedin, InstagramIcon as Instagram } from "@/components/ui/icons";
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
@@ -10,7 +10,6 @@ export function Footer() {
     { name: "Github", icon: <Github className="w-5 h-5" />, href: "https://github.com/Inria-io" },
     { name: "LinkedIn", icon: <Linkedin className="w-5 h-5" />, href: "https://www.linkedin.com/in/inriaaltjekalalo/" },
     { name: "Instagram", icon: <Instagram className="w-5 h-5" />, href: "https://www.instagram.com/inriakalalo?igsh=MTMwaHpwazB5dHp5cA%3D%3D&utm_source=qr" },
-    { name: "YouTube", icon: <Youtube className="w-5 h-5" />, href: "https://www.youtube.com/@inriakalalo" },
     { name: "Email", icon: <Mail className="w-5 h-5" />, href: "mailto:inriakalalo37@gmail.com" },
   ];
 
