@@ -4,6 +4,7 @@ import { Hero } from "@/components/sections/hero";
 import { AboutPreview } from "@/components/sections/about-preview";
 import { Stats } from "@/components/sections/stats";
 import { ThemAboutMe } from "@/components/sections/them-about-me";
+import { TypeRacer } from "@/components/sections/type-racer";
 import { ContactForm } from "@/components/sections/contact-form";
 import { ContactBackground } from "@/components/sections/bg-animations";
 
@@ -14,6 +15,7 @@ export default function HomePage() {
         <AboutPreview />
         <Stats />
         <ThemAboutMe />
+        <TypeRacer />
 
         {/* Contact Section on Home */}
         <section className="w-full py-16 md:py-24 bg-white dark:bg-zinc-950 transition-colors duration-200 relative overflow-hidden">

@@ -123,7 +123,7 @@ export default function AboutPage() {
     <div className="w-full py-16 bg-[#F4F3EF] dark:bg-zinc-950 min-h-screen text-black dark:text-white transition-colors duration-200 relative overflow-hidden">
       <AboutBackground />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
- 
+
         {/* Heading */}
         <div className="flex items-center gap-4 mb-10">
           <div className="p-3 bg-neo-yellow text-black neo-border shadow-neo flex items-center justify-center">
@@ -136,13 +136,13 @@ export default function AboutPage() {
 
         {/* Biography Grid: Polaroid Photo + Description */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start mb-12">
-          
+
           {/* Polaroid Photo Column */}
           <div className="md:col-span-5 flex justify-center py-2">
             <motion.div
               initial={{ rotate: -2, y: 0 }}
-              whileHover={{ 
-                y: -10, 
+              whileHover={{
+                y: -10,
                 rotate: 1,
                 scale: 1.02,
               }}
@@ -153,7 +153,7 @@ export default function AboutPage() {
               <div className="w-full aspect-[4/5] bg-zinc-200 border-4 border-black relative overflow-hidden flex items-center justify-center">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                   src="/Foto%20preuni.jpeg"
+                  src="/Foto%20preuni.jpeg"
                   alt="Inria's Portrait"
                   draggable={false}
                   onDragStart={(e) => e.preventDefault()}
@@ -165,7 +165,7 @@ export default function AboutPage() {
               </div>
             </motion.div>
           </div>
- 
+
           {/* Biography Card Column */}
           <Card className="md:col-span-7 border-4 border-black bg-white dark:bg-zinc-900 shadow-neo p-6 md:p-8">
             <div className="space-y-6 font-sans font-semibold text-zinc-700 dark:text-zinc-300 leading-relaxed text-base">
@@ -228,7 +228,7 @@ export default function AboutPage() {
                 Always Learning
               </h3>
               <p className="font-sans font-bold text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">
-                I'm constantly exploring new tools and ideas — inside and outside of tech — to stay sharp and think differently.
+                I'm constantly exploring new tools and ideas inside and outside of tech to stay sharp and think differently.
               </p>
             </Card>
 
@@ -241,7 +241,7 @@ export default function AboutPage() {
                 Integrity First
               </h3>
               <p className="font-sans font-bold text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">
-                I show up with honesty and consistency in everything — code, collaboration, and character.
+                I show up with honesty and consistency in everything code, collaboration, and character.
               </p>
             </Card>
 
@@ -254,7 +254,7 @@ export default function AboutPage() {
                 Tech Meets Business
               </h3>
               <p className="font-sans font-bold text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">
-                I believe the most meaningful impact happens at the intersection of technology and entrepreneurship — and I'm building toward that.
+                I believe the most meaningful impact happens at the intersection of technology and entrepreneurship and I'm building toward that.
               </p>
             </Card>
           </div>
@@ -376,11 +376,11 @@ export default function AboutPage() {
 
       {/* Certificate Detail Modal / Lightbox */}
       {selectedCert && (
-        <div 
+        <div
           className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4"
           onClick={() => setSelectedCert(null)}
         >
-          <div 
+          <div
             className="bg-white dark:bg-zinc-900 border-4 border-black dark:border-white shadow-neo max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 flex flex-col space-y-4 text-black dark:text-white"
             onClick={(e) => e.stopPropagation()}
           >
@@ -409,9 +409,9 @@ export default function AboutPage() {
             <div className="w-full border-4 border-black dark:border-zinc-750 overflow-hidden bg-zinc-100 dark:bg-zinc-800 p-2 flex items-center justify-center min-h-[220px]">
               {selectedCert.image_url ? (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img 
-                  src={selectedCert.image_url} 
-                  alt={selectedCert.title} 
+                <img
+                  src={selectedCert.image_url}
+                  alt={selectedCert.title}
                   className="w-full h-auto object-contain max-h-[50vh] border-2 border-black dark:border-zinc-700 shadow-neo-sm"
                 />
               ) : (
@@ -426,9 +426,9 @@ export default function AboutPage() {
             {/* Modal Footer/Actions */}
             <div className="flex flex-col sm:flex-row gap-3 pt-3 border-t-2 border-dashed border-zinc-200 dark:border-zinc-800 justify-end">
               {selectedCert.credential_url && selectedCert.credential_url !== "#" && (
-                <a 
-                  href={selectedCert.credential_url} 
-                  target="_blank" 
+                <a
+                  href={selectedCert.credential_url}
+                  target="_blank"
                   rel="noopener noreferrer"
                   className="w-full sm:w-auto"
                 >
@@ -438,8 +438,8 @@ export default function AboutPage() {
                   </Button>
                 </a>
               )}
-              <Button 
-                variant="secondary" 
+              <Button
+                variant="secondary"
                 onClick={() => setSelectedCert(null)}
                 className="w-full sm:w-auto"
               >
