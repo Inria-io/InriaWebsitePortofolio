@@ -20,8 +20,8 @@ const plusJakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Neobrutalist Developer Portfolio",
-  description: "A bold, modern developer portfolio built with Next.js, Tailwind CSS, Framer Motion, and Supabase.",
+  title: "Inria's Portfolio | Tech Entrepreneur & Developer",
+  description: "Hi, I'm Inria Altje Kalalo, an IT student from Indonesia with a deep passion for building technology that matters. Explore my projects, skills, and blog.",
 };
 
 export default function RootLayout({

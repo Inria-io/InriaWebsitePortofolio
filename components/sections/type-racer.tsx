@@ -121,10 +121,10 @@ export function TypeRacer() {
     setGameState("playing");
     startTimeRef.current = Date.now();
 
-    // Focus input on next tick
-    setTimeout(() => {
-      inputRef.current?.focus();
-    }, 50);
+    // Focus synchronously so that virtual keyboards trigger immediately on mobile devices
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
   };
 
   // End the game
@@ -271,6 +271,7 @@ export function TypeRacer() {
           <AnimatePresence mode="wait">
             {gameState === "idle" && (
               <motion.div
+                key="idle"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
@@ -294,97 +295,9 @@ export function TypeRacer() {
               </motion.div>
             )}
 
-            {gameState === "playing" && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="space-y-8"
-              >
-                {/* Sentence Display */}
-                <motion.div
-                  animate={shouldShake ? { x: [-10, 10, -10, 10, 0] } : {}}
-                  transition={{ duration: 0.3 }}
-                  className="p-6 bg-zinc-50 dark:bg-zinc-800 border-3 border-black font-mono text-base md:text-lg lg:text-xl leading-relaxed select-none break-all"
-                >
-                  {renderSentenceHighlighting()}
-                </motion.div>
-
-                {/* Input Area */}
-                <div className="relative">
-                  <input
-                    ref={inputRef}
-                    type="text"
-                    value={inputVal}
-                    onChange={handleInputChange}
-                    placeholder="Start typing the phrase above exactly..."
-                    className="w-full p-4 font-mono text-sm md:text-base border-4 border-black bg-white dark:bg-zinc-850 text-black dark:text-white shadow-neo focus:outline-none focus:ring-0 focus:border-neo-pink transition-all placeholder:text-zinc-400"
-                    autoComplete="off"
-                    autoCapitalize="off"
-                    autoCorrect="off"
-                    spellCheck="false"
-                  />
-
-                  {/* Floating Keyboard Hint */}
-                  <div className="absolute right-4 top-1/2 -translate-y-1/2 hidden sm:flex items-center gap-1.5 font-space font-black text-xs text-zinc-400">
-                    <span>PRESS TAB TO RESET</span>
-                    <RotateCw className="w-3.5 h-3.5" />
-                  </div>
-                </div>
-
-                {/* Reset button under input */}
-                <div className="flex justify-end">
-                  <Button
-                    onClick={startGame}
-                    variant="outline"
-                    className="font-space font-extrabold uppercase border-2 border-black shadow-neo-sm hover:translate-y-0.5 hover:shadow-none duration-100 flex items-center gap-2 text-xs py-1"
-                  >
-                    <RotateCw className="w-3.5 h-3.5" />
-                    Reset Challenge
-                  </Button>
-                </div>
-
-                {/* Interactive Neobrutalist Mechanical Keyboard */}
-                <div className="p-4 bg-zinc-100 dark:bg-zinc-950 border-4 border-black shadow-neo rounded-none space-y-2 mt-4 max-w-2xl mx-auto">
-                  {KEYBOARD_ROWS.map((row, rowIndex) => (
-                    <div key={rowIndex} className="flex justify-center gap-1.5 sm:gap-2">
-                      {row.map((key) => {
-                        const isPressed = pressedKeys.has(key);
-                        const baseColor = getKeyColor(key);
-
-                        return (
-                          <div
-                            key={key}
-                            className={`w-7 h-7 sm:w-10 sm:h-10 border-2 border-black flex items-center justify-center font-space font-black text-xs sm:text-sm rounded-none transition-all duration-75 select-none ${isPressed
-                                ? "bg-white text-black translate-x-[3px] translate-y-[3px] shadow-none"
-                                : `${baseColor} shadow-[2px_2px_0px_0px_#000] dark:shadow-[2px_2px_0px_0px_#fff]`
-                              }`}
-                          >
-                            {key}
-                          </div>
-                        );
-                      })}
-                    </div>
-                  ))}
-
-                  {/* Spacebar Row */}
-                  <div className="flex justify-center gap-2 pt-1">
-                    <div
-                      className={`h-7 sm:h-10 w-40 sm:w-60 border-2 border-black flex items-center justify-center font-space font-black text-xs uppercase rounded-none transition-all duration-75 select-none ${pressedKeys.has("SPACE")
-                          ? "bg-white text-black translate-x-[3px] translate-y-[3px] shadow-none"
-                          : "bg-neo-orange text-black shadow-[2px_2px_0px_0px_#000] dark:shadow-[2px_2px_0px_0px_#fff]"
-                        }`}
-                    >
-                      SPACEBAR
-                    </div>
-                  </div>
-                </div>
-
-              </motion.div>
-            )}
-
             {gameState === "finished" && (
               <motion.div
+                key="finished"
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0 }}
@@ -429,8 +342,89 @@ export function TypeRacer() {
               </motion.div>
             )}
           </AnimatePresence>
-        </Card>
 
+          {/* Always mounted to allow synchronous focus on mobile devices, preventing keyboard block */}
+          <div className={gameState === "playing" ? "block space-y-8 mt-4" : "hidden"}>
+            {/* Sentence Display */}
+            <motion.div
+              animate={shouldShake ? { x: [-10, 10, -10, 10, 0] } : {}}
+              transition={{ duration: 0.3 }}
+              className="p-6 bg-zinc-50 dark:bg-zinc-800 border-3 border-black font-mono text-base md:text-lg lg:text-xl leading-relaxed select-none break-all"
+            >
+              {renderSentenceHighlighting()}
+            </motion.div>
+
+            {/* Input Area */}
+            <div className="relative">
+              <input
+                ref={inputRef}
+                type="text"
+                value={inputVal}
+                onChange={handleInputChange}
+                placeholder="Start typing the phrase above exactly..."
+                className="w-full p-4 font-mono text-sm md:text-base border-4 border-black bg-white dark:bg-zinc-850 text-black dark:text-white shadow-neo focus:outline-none focus:ring-0 focus:border-neo-pink transition-all placeholder:text-zinc-400"
+                autoComplete="off"
+                autoCapitalize="off"
+                autoCorrect="off"
+                spellCheck="false"
+              />
+
+              {/* Floating Keyboard Hint */}
+              <div className="absolute right-4 top-1/2 -translate-y-1/2 hidden sm:flex items-center gap-1.5 font-space font-black text-xs text-zinc-400">
+                <span>PRESS TAB TO RESET</span>
+                <RotateCw className="w-3.5 h-3.5" />
+              </div>
+            </div>
+
+            {/* Reset button under input */}
+            <div className="flex justify-end">
+              <Button
+                onClick={startGame}
+                variant="outline"
+                className="font-space font-extrabold uppercase border-2 border-black shadow-neo-sm hover:translate-y-0.5 hover:shadow-none duration-100 flex items-center gap-2 text-xs py-1"
+              >
+                <RotateCw className="w-3.5 h-3.5" />
+                Reset Challenge
+              </Button>
+            </div>
+
+            {/* Interactive Neobrutalist Mechanical Keyboard */}
+            <div className="p-4 bg-zinc-100 dark:bg-zinc-950 border-4 border-black shadow-neo rounded-none space-y-2 mt-4 max-w-2xl mx-auto">
+              {KEYBOARD_ROWS.map((row, rowIndex) => (
+                <div key={rowIndex} className="flex justify-center gap-1.5 sm:gap-2">
+                  {row.map((key) => {
+                    const isPressed = pressedKeys.has(key);
+                    const baseColor = getKeyColor(key);
+
+                    return (
+                      <div
+                        key={key}
+                        className={`w-7 h-7 sm:w-10 sm:h-10 border-2 border-black flex items-center justify-center font-space font-black text-xs sm:text-sm rounded-none transition-all duration-75 select-none ${isPressed
+                          ? "bg-white text-black translate-x-[3px] translate-y-[3px] shadow-none"
+                          : `${baseColor} shadow-[2px_2px_0px_0px_#000] dark:shadow-[2px_2px_0px_0px_#fff]`
+                        }`}
+                      >
+                        {key}
+                      </div>
+                    );
+                  })}
+                </div>
+              ))}
+
+              {/* Spacebar Row */}
+              <div className="flex justify-center gap-2 pt-1">
+                <div
+                  className={`h-7 sm:h-10 w-40 sm:w-60 border-2 border-black flex items-center justify-center font-space font-black text-xs uppercase rounded-none transition-all duration-75 select-none ${pressedKeys.has("SPACE")
+                    ? "bg-white text-black translate-x-[3px] translate-y-[3px] shadow-none"
+                    : "bg-neo-orange text-black shadow-[2px_2px_0px_0px_#000] dark:shadow-[2px_2px_0px_0px_#fff]"
+                  }`}
+                >
+                  SPACEBAR
+                </div>
+              </div>
+            </div>
+          </div>
+        </Card>
       </div>
     </section>
   );

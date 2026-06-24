@@ -12,11 +12,19 @@ export function InriaLogo({
   ...props
 }: InriaLogoProps) {
   return (
-    <img
-      src="/logo no background.png"
-      alt="Inria Logo"
-      className={`object-contain dark:brightness-0 dark:invert ${className}`}
-      {...props}
-    />
+    <>
+      <img
+        src="/logo no background.png"
+        alt="Inria Logo"
+        className={`object-contain dark:hidden ${className}`}
+        {...props}
+      />
+      <img
+        src="/logo-dark-mode.png"
+        alt="Inria Logo"
+        className={`object-contain hidden dark:block ${className}`}
+        {...props}
+      />
+    </>
   );
 }
