@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
+import { InriaLogo } from "@/components/ui/inria-logo";
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -31,10 +32,8 @@ export function Navbar() {
     <header className="sticky top-0 z-50 w-full bg-white dark:bg-zinc-950 border-b-4 border-black dark:border-white transition-colors duration-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
         {/* Logo */}
-        <Link href="/" className="group flex items-center">
-          <span className="font-space font-black text-2xl uppercase tracking-tighter bg-neo-yellow px-3 py-1.5 neo-border shadow-neo group-hover:-translate-x-0.5 group-hover:-translate-y-0.5 group-hover:shadow-neo-lg active:translate-x-0 active:translate-y-0 active:shadow-neo transition-all text-black">
-            INRIA.IO
-          </span>
+        <Link href="/" className="group flex items-center transition-transform hover:scale-105 duration-200">
+          <InriaLogo className="h-40 md:h-44 w-auto -my-16" />
         </Link>
 
         {/* Desktop Navigation */}

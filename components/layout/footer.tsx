@@ -2,6 +2,7 @@ import React from "react";
 import Link from "next/link";
 import { Mail } from "lucide-react";
 import { GithubIcon as Github, LinkedinIcon as Linkedin, InstagramIcon as Instagram } from "@/components/ui/icons";
+import { InriaLogo } from "@/components/ui/inria-logo";
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
@@ -18,9 +19,9 @@ export function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex flex-col md:flex-row items-center justify-between gap-8">
         {/* Brand */}
         <div className="flex flex-col items-center md:items-start space-y-2">
-          <span className="font-space font-black text-xl uppercase bg-neo-pink px-3 py-1 neo-border shadow-neo text-black">
-            INRIA.IO
-          </span>
+          <Link href="/" className="group flex items-center transition-transform hover:scale-105 duration-200">
+            <InriaLogo className="h-36 md:h-40 w-auto -my-14" />
+          </Link>
           <p className="text-sm text-zinc-600 dark:text-zinc-400 font-sans font-medium text-center md:text-left">
             Turning ideas into real, usable technology.
           </p>
