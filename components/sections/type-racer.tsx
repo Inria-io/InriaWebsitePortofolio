@@ -29,7 +29,7 @@ const getKeyColor = (key: string) => {
   const blueKeys = ["Q", "T", "U", "O", "D", "G", "J", "L", "C", "B", "M"];
   const pinkKeys = ["W", "Y", "P", "S", "H", "K", "X", "N"];
   const greenKeys = ["E", "I", "A", "F", "Z", "V"];
-  
+
   if (blueKeys.includes(key)) return "bg-neo-blue text-black";
   if (pinkKeys.includes(key)) return "bg-neo-pink text-black";
   if (greenKeys.includes(key)) return "bg-neo-green text-black";
@@ -57,7 +57,7 @@ export function TypeRacer() {
     const handleKeyDown = (e: KeyboardEvent) => {
       let key = e.key.toUpperCase();
       if (key === " ") key = "SPACE";
-      
+
       setPressedKeys((prev) => {
         const next = new Set(prev);
         next.add(key);
@@ -155,7 +155,7 @@ export function TypeRacer() {
   // Handle typing input
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
-    
+
     // Disable input if finished or idle
     if (gameState !== "playing") return;
 
@@ -185,7 +185,7 @@ export function TypeRacer() {
 
     const timeElapsed = (Date.now() - startTimeRef.current) / 1000; // in seconds
     const minutesElapsed = timeElapsed / 60;
-    
+
     const charsTyped = totalTyped + inputVal.length;
     if (charsTyped === 0) return;
 
@@ -236,7 +236,7 @@ export function TypeRacer() {
   return (
     <section className="w-full py-16 bg-transparent dark:bg-zinc-950 transition-colors duration-200 relative overflow-hidden">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        
+
         {/* Section Title */}
         <div className="flex flex-col items-center space-y-4 mb-10 text-center">
           <div className="p-3 bg-neo-pink text-black neo-border shadow-neo flex items-center justify-center">
@@ -251,7 +251,7 @@ export function TypeRacer() {
         </div>
 
         <Card className="border-4 border-black bg-white dark:bg-zinc-900 p-6 md:p-8 shadow-neo max-w-3xl mx-auto relative">
-          
+
           {/* Top Info Bar */}
           <div className="grid grid-cols-3 gap-4 mb-8 border-b-4 border-black pb-6 text-center font-space font-black uppercase text-sm md:text-base">
             <div className="p-2 bg-neo-blue text-black border-2 border-black shadow-neo-sm">
@@ -324,7 +324,7 @@ export function TypeRacer() {
                     autoCorrect="off"
                     spellCheck="false"
                   />
-                  
+
                   {/* Floating Keyboard Hint */}
                   <div className="absolute right-4 top-1/2 -translate-y-1/2 hidden sm:flex items-center gap-1.5 font-space font-black text-xs text-zinc-400">
                     <span>PRESS TAB TO RESET</span>
@@ -355,11 +355,10 @@ export function TypeRacer() {
                         return (
                           <div
                             key={key}
-                            className={`w-7 h-7 sm:w-10 sm:h-10 border-2 border-black flex items-center justify-center font-space font-black text-xs sm:text-sm rounded-none transition-all duration-75 select-none ${
-                              isPressed
+                            className={`w-7 h-7 sm:w-10 sm:h-10 border-2 border-black flex items-center justify-center font-space font-black text-xs sm:text-sm rounded-none transition-all duration-75 select-none ${isPressed
                                 ? "bg-white text-black translate-x-[3px] translate-y-[3px] shadow-none"
                                 : `${baseColor} shadow-[2px_2px_0px_0px_#000] dark:shadow-[2px_2px_0px_0px_#fff]`
-                            }`}
+                              }`}
                           >
                             {key}
                           </div>
@@ -371,11 +370,10 @@ export function TypeRacer() {
                   {/* Spacebar Row */}
                   <div className="flex justify-center gap-2 pt-1">
                     <div
-                      className={`h-7 sm:h-10 w-40 sm:w-60 border-2 border-black flex items-center justify-center font-space font-black text-xs uppercase rounded-none transition-all duration-75 select-none ${
-                        pressedKeys.has("SPACE")
+                      className={`h-7 sm:h-10 w-40 sm:w-60 border-2 border-black flex items-center justify-center font-space font-black text-xs uppercase rounded-none transition-all duration-75 select-none ${pressedKeys.has("SPACE")
                           ? "bg-white text-black translate-x-[3px] translate-y-[3px] shadow-none"
                           : "bg-neo-orange text-black shadow-[2px_2px_0px_0px_#000] dark:shadow-[2px_2px_0px_0px_#fff]"
-                      }`}
+                        }`}
                     >
                       SPACEBAR
                     </div>
@@ -395,7 +393,7 @@ export function TypeRacer() {
                 <div className="inline-block p-4 bg-neo-pink text-black border-3 border-black shadow-neo">
                   <Award className="w-12 h-12" />
                 </div>
-                
+
                 <h3 className="font-space font-black text-2xl md:text-3xl uppercase">
                   Time's Up! Challenge Complete!
                 </h3>
