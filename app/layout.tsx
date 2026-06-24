@@ -20,7 +20,7 @@ const plusJakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Inria's Portfolio | Tech Entrepreneur & Developer",
+  title: "Inria Kalalo - Website Portfolio | Tech Entrepreneur & Developer",
   description: "Hi, I'm Inria Altje Kalalo, an IT student from Indonesia with a deep passion for building technology that matters. Explore my projects, skills, and blog.",
 };
 

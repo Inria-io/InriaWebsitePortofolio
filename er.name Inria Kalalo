@@ -1,0 +1,29 @@
+[33mcommit dc490c84f13dcfa580d68c2f6e571ff46d222ed2[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m
+Author: inriakalalo37@gmail.com <inriakalalo4@gmail.com>
+Date:   Thu Jun 25 02:04:49 2026 +0700
+
+    fix: resolve mobile keyboard focus, update seo title, and fix logo WebKit rendering bug in dark mode
+
+[33mcommit 6aa9cb7e99721e72968915796f5b709eb77cd840[m
+Author: inriakalalo37@gmail.com <inriakalalo4@gmail.com>
+Date:   Thu Jun 25 00:36:23 2026 +0700
+
+    Update logo transparan baru dan favicon chevron
+
+[33mcommit b532cb7efd2b5ce3d7dcb9601d7e982d133c51ef[m
+Author: inriakalalo37@gmail.com <inriakalalo4@gmail.com>
+Date:   Wed Jun 24 23:27:51 2026 +0700
+
+    chore: clean up contact form and prepare for deployment
+
+[33mcommit 267c29ca09b1863758e857a29e5415d816c9a968[m
+Author: inriakalalo37@gmail.com <inriakalalo4@gmail.com>
+Date:   Wed Jun 24 17:18:43 2026 +0700
+
+    make a mini game
+
+[33mcommit fbd54ef77db2d9c63c7c4bc3ed6bc46882294e9d[m
+Author: inriakalalo37@gmail.com <inriakalalo4@gmail.com>
+Date:   Fri Jun 19 05:24:45 2026 +0700
+
+    remove youtube social links
