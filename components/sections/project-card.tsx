@@ -55,8 +55,10 @@ export function ProjectCard({ project, index }: ProjectCardProps) {
             ))}
           </div>
 
-          <h3 className="font-space font-black text-xl md:text-2xl uppercase text-black dark:text-white leading-tight">
-            {project.title}
+          <h3 className="font-space font-black text-xl md:text-2xl uppercase text-black dark:text-white leading-tight hover:text-neo-blue dark:hover:text-neo-blue transition-colors hover:underline">
+            <Link href={`/portfolio/${project.slug}`}>
+              {project.title}
+            </Link>
           </h3>
 
           <p className="font-sans font-semibold text-sm text-zinc-600 dark:text-zinc-400 line-clamp-3">

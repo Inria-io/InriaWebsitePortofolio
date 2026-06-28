@@ -157,21 +157,21 @@ export function ThemAboutMe() {
                 <div className="w-full h-1 bg-black dark:bg-zinc-700 mb-4" />
 
                 {/* Author */}
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-4">
                   {/* Avatar — photo or initials */}
                   {testimonial.avatar_url ? (
-                    <div className="relative w-12 h-12 border-2 border-black overflow-hidden rounded-full flex-shrink-0">
+                    <div className="relative w-16 h-16 md:w-20 md:h-20 border-2 border-black overflow-hidden rounded-full flex-shrink-0 shadow-neo-sm">
                       <Image
                         src={testimonial.avatar_url}
                         alt={testimonial.name}
                         fill
                         className="object-cover"
-                        sizes="48px"
+                        sizes="(max-width: 768px) 64px, 80px"
                       />
                     </div>
                   ) : (
                     <div
-                      className={`w-12 h-12 ${accentColor} border-2 border-black flex items-center justify-center font-space font-black text-sm text-black rounded-full flex-shrink-0`}
+                      className={`w-16 h-16 md:w-20 md:h-20 ${accentColor} border-2 border-black flex items-center justify-center font-space font-black text-lg md:text-xl text-black rounded-full flex-shrink-0 shadow-neo-sm`}
                     >
                       {initials}
                     </div>

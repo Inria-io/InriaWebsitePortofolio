@@ -43,7 +43,7 @@ export default function ContactPage() {
     <div className="w-full py-16 bg-[#F4F3EF] dark:bg-zinc-950 min-h-screen text-black dark:text-white transition-colors duration-200 relative overflow-hidden">
       <ContactBackground />
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        
+
         {/* Heading */}
         <div className="flex flex-col items-center text-center space-y-4 mb-16">
           <div className="p-3 bg-neo-yellow text-black neo-border shadow-neo flex items-center justify-center">
@@ -59,7 +59,7 @@ export default function ContactPage() {
 
         {/* Contact Info Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-          
+
           {/* Email Card (Spans full columns on larger screens) */}
           <Card className="border-4 border-black bg-white dark:bg-zinc-900 p-6 md:p-8 shadow-neo hover:-translate-x-1 hover:-translate-y-1 hover:shadow-neo-lg transition-all duration-200 md:col-span-2 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
             <div className="flex items-center gap-5">
@@ -78,7 +78,7 @@ export default function ContactPage() {
                 </a>
               </div>
             </div>
-            
+
             {/* Copy Email Button */}
             <button
               onClick={copyEmail}
@@ -108,7 +108,7 @@ export default function ContactPage() {
                 My Location
               </span>
               <span className="font-space font-black text-base md:text-lg text-black dark:text-white block">
-                Sudirman, Jakarta, Indonesia
+                Jakarta, Indonesia
               </span>
             </div>
           </Card>

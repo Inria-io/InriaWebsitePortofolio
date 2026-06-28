@@ -185,10 +185,10 @@ export default function AboutPage() {
                 My long-term goal? To build a technology-based business that creates real impact starting with the products I'm building today.
               </p>
               <div className="flex flex-wrap gap-4 pt-2">
-                <a href="/resume.pdf" download>
+                <a href="/cv.pdf" download>
                   <Button variant="secondary" className="flex items-center gap-2">
                     <FileText className="w-5 h-5" />
-                    Download Resume
+                    Download CV
                   </Button>
                 </a>
               </div>
