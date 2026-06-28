@@ -408,15 +408,6 @@ export default function AboutPage() {
               </button>
             </div>
 
-            {/* Description */}
-            {selectedCert.description && (
-              <div className="border-l-4 border-black dark:border-white bg-zinc-50 dark:bg-zinc-800 px-4 py-3">
-                <p className="font-sans text-sm text-zinc-700 dark:text-zinc-300 leading-relaxed">
-                  {selectedCert.description}
-                </p>
-              </div>
-            )}
-
             {/* Certificate Image Preview */}
             <div className="w-full border-4 border-black dark:border-zinc-750 overflow-hidden bg-zinc-100 dark:bg-zinc-800 p-2 flex items-center justify-center min-h-[220px]">
               {selectedCert.image_url ? (
@@ -434,6 +425,15 @@ export default function AboutPage() {
                 </div>
               )}
             </div>
+
+            {/* Description */}
+            {selectedCert.description && (
+              <div className="border-l-4 border-black dark:border-white bg-zinc-50 dark:bg-zinc-800 px-4 py-3">
+                <p className="font-sans text-sm text-zinc-700 dark:text-zinc-300 leading-relaxed">
+                  {selectedCert.description}
+                </p>
+              </div>
+            )}
 
             {/* Modal Footer/Actions */}
             <div className="flex flex-col sm:flex-row gap-3 pt-3 border-t-2 border-dashed border-zinc-200 dark:border-zinc-800 justify-end">
