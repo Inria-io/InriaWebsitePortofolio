@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState, useRef } from "react";
-import { MessageCircle, Quote, ArrowLeft, ArrowRight } from "lucide-react";
+import { MessageCircle, Quote, ArrowLeft, ArrowRight, X } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { Testimonial } from "@/lib/types";
 import Image from "next/image";
@@ -42,6 +42,7 @@ const CARD_COLORS = ["bg-neo-yellow", "bg-neo-blue", "bg-neo-pink", "bg-neo-gree
 
 export function ThemAboutMe() {
   const [testimonials, setTestimonials] = useState<Testimonial[]>(fallbackTestimonials);
+  const [selectedTestimonial, setSelectedTestimonial] = useState<Testimonial | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -159,23 +160,29 @@ export function ThemAboutMe() {
                 {/* Author */}
                 <div className="flex items-center gap-4">
                   {/* Avatar — photo or initials */}
-                  {testimonial.avatar_url ? (
-                    <div className="relative w-16 h-16 md:w-20 md:h-20 border-2 border-black overflow-hidden rounded-full flex-shrink-0 shadow-neo-sm">
-                      <Image
-                        src={testimonial.avatar_url}
-                        alt={testimonial.name}
-                        fill
-                        className="object-cover"
-                        sizes="(max-width: 768px) 64px, 80px"
-                      />
-                    </div>
-                  ) : (
-                    <div
-                      className={`w-16 h-16 md:w-20 md:h-20 ${accentColor} border-2 border-black flex items-center justify-center font-space font-black text-lg md:text-xl text-black rounded-full flex-shrink-0 shadow-neo-sm`}
-                    >
-                      {initials}
-                    </div>
-                  )}
+                  <button 
+                    onClick={() => setSelectedTestimonial(testimonial)}
+                    className="cursor-pointer hover:scale-105 active:scale-95 transition-transform"
+                    aria-label={`View ${testimonial.name} profile`}
+                  >
+                    {testimonial.avatar_url ? (
+                      <div className="relative w-16 h-16 md:w-20 md:h-20 border-2 border-black overflow-hidden rounded-full flex-shrink-0 shadow-neo-sm">
+                        <Image
+                          src={testimonial.avatar_url}
+                          alt={testimonial.name}
+                          fill
+                          className="object-cover"
+                          sizes="(max-width: 768px) 64px, 80px"
+                        />
+                      </div>
+                    ) : (
+                      <div
+                        className={`w-16 h-16 md:w-20 md:h-20 ${accentColor} border-2 border-black flex items-center justify-center font-space font-black text-lg md:text-xl text-black rounded-full flex-shrink-0 shadow-neo-sm`}
+                      >
+                        {initials}
+                      </div>
+                    )}
+                  </button>
                   <div>
                     <p className="font-space font-black text-sm uppercase text-black dark:text-white">
                       {testimonial.name}
@@ -190,6 +197,58 @@ export function ThemAboutMe() {
           })}
         </div>
       </div>
+
+      {/* Testimonial Photo Modal / Lightbox */}
+      {selectedTestimonial && (
+        <div
+          className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4"
+          onClick={() => setSelectedTestimonial(null)}
+        >
+          <div
+            className="bg-white dark:bg-zinc-900 border-4 border-black dark:border-white shadow-neo max-w-sm w-full p-6 flex flex-col items-center text-center space-y-4 text-black dark:text-white relative"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Close Button */}
+            <button
+              onClick={() => setSelectedTestimonial(null)}
+              className="absolute top-4 right-4 p-1.5 bg-white dark:bg-zinc-800 text-black dark:text-white border-2 border-black dark:border-white shadow-neo-sm hover:translate-y-[-1px] active:translate-y-[1px] hover:bg-neo-pink dark:hover:bg-neo-pink dark:hover:text-black transition-all cursor-pointer"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            {/* Enlarged Photo */}
+            <div className="w-40 h-40 md:w-48 md:h-48 border-4 border-black dark:border-zinc-700 overflow-hidden rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center mt-4 shadow-neo-sm">
+              {selectedTestimonial.avatar_url ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={selectedTestimonial.avatar_url}
+                  alt={selectedTestimonial.name}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="font-space font-black text-5xl md:text-6xl text-black dark:text-white">
+                  {selectedTestimonial.name
+                    .split(" ")
+                    .map((n) => n[0])
+                    .join("")
+                    .slice(0, 2)
+                    .toUpperCase()}
+                </div>
+              )}
+            </div>
+
+            {/* Name & Role */}
+            <div className="space-y-1">
+              <h3 className="font-space font-black text-xl uppercase leading-tight">
+                {selectedTestimonial.name}
+              </h3>
+              <p className="font-sans font-semibold text-sm text-zinc-500">
+                {selectedTestimonial.role}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }
