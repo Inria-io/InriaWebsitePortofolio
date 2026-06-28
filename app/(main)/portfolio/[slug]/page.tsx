@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, ExternalLink, Calendar, Code } from "lucide-react";
+import { ArrowLeft, ExternalLink, Calendar, Code, FileText } from "lucide-react";
 import { GithubIcon as Github } from "@/components/ui/icons";
 import ReactMarkdown from "react-markdown";
 import { createClient } from "@/lib/supabase/server";
@@ -71,6 +71,8 @@ Developed as a sample showcase of premium dashboard aesthetics.
         featured: true,
         github_url: "https://github.com",
         live_url: "https://example.com",
+        report_url: "#",
+        report_title: "Download Case Study (PDF)",
       },
       "cyber-mart-e-commerce": {
         id: "mock-2",
@@ -229,6 +231,14 @@ Collaborative visual workspace using HTML5 Canvas and socket handshakes.
                       <Button variant="outline" className="w-full flex items-center justify-center gap-2 py-3">
                         <Github className="w-5 h-5" />
                         Repository
+                      </Button>
+                    </a>
+                  )}
+                  {project.report_url && (
+                    <a href={project.report_url} target="_blank" rel="noopener noreferrer" className="w-full">
+                      <Button variant="purple" className="w-full flex items-center justify-center gap-2 py-3">
+                        <FileText className="w-5 h-5 text-black" />
+                        {project.report_title || "Project Report (PDF)"}
                       </Button>
                     </a>
                   )}

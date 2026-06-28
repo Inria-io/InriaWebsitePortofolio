@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import Link from "next/link";
 import { BarChart3, Smile, ClipboardList, Headphones, Award, Users, BookOpen } from "lucide-react";
 import { SkillsBackground } from "./bg-animations";
 import { createClient } from "@/lib/supabase/client";
@@ -41,9 +42,9 @@ export function Stats() {
 
   const stats = [
     { value: "10 +", label: "People Collaborated", icon: Users, color: "bg-neo-yellow" },
-    { value: projectCount !== null ? `${projectCount}` : "100 +", label: "Projects", icon: ClipboardList, color: "bg-neo-blue" },
+    { value: projectCount !== null ? `${projectCount}` : "100 +", label: "Projects", icon: ClipboardList, color: "bg-neo-blue", link: "/portfolio" },
     { value: "2 +", label: "Years Of Learning", icon: BookOpen, color: "bg-neo-pink" },
-    { value: certCount !== null ? `${certCount}` : "7", label: "Certification", icon: Award, color: "bg-neo-green" },
+    { value: certCount !== null ? `${certCount}` : "7", label: "Certification", icon: Award, color: "bg-neo-green", link: "/about#certificates" },
   ];
 
   return (
@@ -67,11 +68,8 @@ export function Stats() {
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 md:gap-8">
           {stats.map((stat, idx) => {
             const Icon = stat.icon;
-            return (
-              <div
-                key={idx}
-                className="relative flex flex-col items-center justify-center bg-white dark:bg-zinc-900 border-4 border-black dark:border-zinc-700 shadow-neo p-8 md:p-10 hover:-translate-y-1 hover:shadow-neo-lg transition-all duration-200"
-              >
+            const cardContent = (
+              <>
                 {/* Icon */}
                 <div className={`p-3 ${stat.color} border-2 border-black mb-4`}>
                   <Icon className="w-6 h-6 text-black" />
@@ -86,6 +84,29 @@ export function Stats() {
                 <span className="font-space font-extrabold text-xs uppercase tracking-wider text-zinc-500 dark:text-zinc-400 text-center">
                   {stat.label}
                 </span>
+              </>
+            );
+
+            const cardClasses = "relative flex flex-col items-center justify-center bg-white dark:bg-zinc-900 border-4 border-black dark:border-zinc-700 shadow-neo p-8 md:p-10 hover:-translate-y-1 hover:shadow-neo-lg transition-all duration-200 w-full";
+
+            if (stat.link) {
+              return (
+                <Link
+                  key={idx}
+                  href={stat.link}
+                  className={`${cardClasses} cursor-pointer hover:bg-zinc-50 dark:hover:bg-zinc-800/50`}
+                >
+                  {cardContent}
+                </Link>
+              );
+            }
+
+            return (
+              <div
+                key={idx}
+                className={cardClasses}
+              >
+                {cardContent}
               </div>
             );
           })}

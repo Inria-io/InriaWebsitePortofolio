@@ -12,6 +12,8 @@ CREATE TABLE IF NOT EXISTS projects (
   image_url TEXT,
   github_url TEXT,
   live_url TEXT,
+  report_url TEXT,
+  report_title TEXT,
   tags TEXT[] NOT NULL DEFAULT '{}',
   featured BOOLEAN DEFAULT FALSE
 );

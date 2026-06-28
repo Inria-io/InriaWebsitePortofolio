@@ -47,6 +47,7 @@ export function TypeRacer() {
   const [totalTyped, setTotalTyped] = useState(0);
   const [shouldShake, setShouldShake] = useState(false);
   const [pressedKeys, setPressedKeys] = useState<Set<string>>(new Set());
+  const [capsLockActive, setCapsLockActive] = useState(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
@@ -57,6 +58,9 @@ export function TypeRacer() {
     const handleKeyDown = (e: KeyboardEvent) => {
       let key = e.key.toUpperCase();
       if (key === " ") key = "SPACE";
+
+      // Sync Caps Lock state
+      setCapsLockActive(e.getModifierState("CapsLock"));
 
       setPressedKeys((prev) => {
         const next = new Set(prev);
@@ -82,6 +86,8 @@ export function TypeRacer() {
     const handleKeyUp = (e: KeyboardEvent) => {
       let key = e.key.toUpperCase();
       if (key === " ") key = "SPACE";
+
+      setCapsLockActive(e.getModifierState("CapsLock"));
 
       setPressedKeys((prev) => {
         const next = new Set(prev);
@@ -179,6 +185,90 @@ export function TypeRacer() {
     setInputVal(val);
   };
 
+  // Handle virtual keyboard clicking
+  const handleKeyVirtualPress = (char: string) => {
+    if (gameState !== "playing") {
+      if (char === "ENTER") {
+        startGame();
+      }
+      return;
+    }
+
+    // Add visual press effect for special keys
+    if (char === "BACKSPACE" || char === "CAPSLOCK" || char === "ENTER" || char === "SPACE") {
+      setPressedKeys((prev) => {
+        const next = new Set(prev);
+        next.add(char);
+        return next;
+      });
+      setTimeout(() => {
+        setPressedKeys((prev) => {
+          const next = new Set(prev);
+          next.delete(char);
+          return next;
+        });
+      }, 150);
+    }
+
+    if (char === "BACKSPACE") {
+      setInputVal((prev) => prev.slice(0, -1));
+      inputRef.current?.focus();
+      return;
+    }
+
+    if (char === "CAPSLOCK") {
+      setCapsLockActive((prev) => !prev);
+      inputRef.current?.focus();
+      return;
+    }
+
+    if (char === "ENTER") {
+      // Enter is visual or can act as submit/reset, just focus for now
+      inputRef.current?.focus();
+      return;
+    }
+
+    let nextChar = char;
+    if (char === "SPACE") {
+      nextChar = " ";
+    }
+
+    // Match case with the current character of the target sentence
+    const currentPosition = inputVal.length;
+    const expectedChar = sentence[currentPosition];
+
+    let typedChar = nextChar;
+    if (expectedChar && expectedChar.toUpperCase() === nextChar.toUpperCase()) {
+      typedChar = expectedChar;
+    } else {
+      typedChar = nextChar.length === 1 ? nextChar.toLowerCase() : nextChar;
+    }
+
+    const newVal = inputVal + typedChar;
+
+    // Trigger completion check
+    if (newVal === sentence) {
+      setTotalTyped((prev) => prev + sentence.length);
+      selectRandomSentence();
+      setInputVal("");
+      return;
+    }
+
+    // Detect typo
+    const targetSubstring = sentence.substring(0, newVal.length);
+    if (newVal !== targetSubstring) {
+      setTypoCount((prev) => prev + 1);
+      setShouldShake(true);
+      setTimeout(() => setShouldShake(false), 300);
+    }
+
+    setInputVal(newVal);
+
+    // Keep input focused
+    inputRef.current?.focus();
+  };
+
+
   // Calculate live WPM and Accuracy
   useEffect(() => {
     if (gameState !== "playing" || timeLeft === GAME_DURATION) return;
@@ -197,6 +287,32 @@ export function TypeRacer() {
     const calculatedAccuracy = Math.max(0, Math.round(((charsTyped - typoCount) / charsTyped) * 100));
     setAccuracy(calculatedAccuracy);
   }, [inputVal, totalTyped, timeLeft, typoCount, gameState]);
+
+  // Synchronize keycap lighting with actual input changes (works on mobile too!)
+  useEffect(() => {
+    if (inputVal.length === 0 || gameState !== "playing") return;
+
+    // Get the last typed character
+    let lastChar = inputVal[inputVal.length - 1].toUpperCase();
+    if (lastChar === " ") lastChar = "SPACE";
+
+    // Trigger visual press effect for this keycap
+    setPressedKeys((prev) => {
+      const next = new Set(prev);
+      next.add(lastChar);
+      return next;
+    });
+
+    const timeout = setTimeout(() => {
+      setPressedKeys((prev) => {
+        const next = new Set(prev);
+        next.delete(lastChar);
+        return next;
+      });
+    }, 150);
+
+    return () => clearTimeout(timeout);
+  }, [inputVal, gameState]);
 
   // Determine Rank Name and Color
   const getRank = (finalWpm: number) => {
@@ -390,37 +506,117 @@ export function TypeRacer() {
 
             {/* Interactive Neobrutalist Mechanical Keyboard */}
             <div className="p-4 bg-zinc-100 dark:bg-zinc-950 border-4 border-black shadow-neo rounded-none space-y-2 mt-4 max-w-2xl mx-auto">
-              {KEYBOARD_ROWS.map((row, rowIndex) => (
-                <div key={rowIndex} className="flex justify-center gap-1.5 sm:gap-2">
-                  {row.map((key) => {
-                    const isPressed = pressedKeys.has(key);
-                    const baseColor = getKeyColor(key);
+              {/* Row 1: Q-P + Backspace */}
+              <div className="flex justify-center gap-1 sm:gap-1.5 md:gap-2">
+                {["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"].map((key) => {
+                  const isPressed = pressedKeys.has(key);
+                  const baseColor = getKeyColor(key);
+                  return (
+                    <button
+                      key={key}
+                      type="button"
+                      onClick={() => handleKeyVirtualPress(key)}
+                      className={`w-7 h-7 sm:w-10 sm:h-10 border-2 border-black flex items-center justify-center font-space font-black text-xs sm:text-sm rounded-none transition-all duration-75 select-none active:bg-white active:text-black active:translate-x-[3px] active:translate-y-[3px] active:shadow-none ${isPressed
+                        ? "bg-white text-black translate-x-[3px] translate-y-[3px] shadow-none"
+                        : `${baseColor} shadow-[2px_2px_0px_0px_#000] dark:shadow-[2px_2px_0px_0px_#fff] cursor-pointer hover:-translate-y-0.5 hover:shadow-[2px_3px_0px_0px_#000] dark:hover:shadow-[2px_3px_0px_0px_#fff]`
+                      }`}
+                    >
+                      {key}
+                    </button>
+                  );
+                })}
+                {/* Backspace Key */}
+                <button
+                  type="button"
+                  onClick={() => handleKeyVirtualPress("BACKSPACE")}
+                  className={`h-7 sm:h-10 px-2 sm:px-3 border-2 border-black flex items-center justify-center font-space font-black text-[10px] sm:text-xs uppercase rounded-none transition-all duration-75 select-none active:bg-white active:text-black active:translate-x-[3px] active:translate-y-[3px] active:shadow-none ${pressedKeys.has("BACKSPACE")
+                    ? "bg-white text-black translate-x-[3px] translate-y-[3px] shadow-none"
+                    : "bg-neo-pink text-black shadow-[2px_2px_0px_0px_#000] dark:shadow-[2px_2px_0px_0px_#fff] cursor-pointer hover:-translate-y-0.5 hover:shadow-[2px_3px_0px_0px_#000] dark:hover:shadow-[2px_3px_0px_0px_#fff]"
+                  }`}
+                >
+                  ⌫
+                </button>
+              </div>
 
-                    return (
-                      <div
-                        key={key}
-                        className={`w-7 h-7 sm:w-10 sm:h-10 border-2 border-black flex items-center justify-center font-space font-black text-xs sm:text-sm rounded-none transition-all duration-75 select-none ${isPressed
-                          ? "bg-white text-black translate-x-[3px] translate-y-[3px] shadow-none"
-                          : `${baseColor} shadow-[2px_2px_0px_0px_#000] dark:shadow-[2px_2px_0px_0px_#fff]`
-                        }`}
-                      >
-                        {key}
-                      </div>
-                    );
-                  })}
-                </div>
-              ))}
+              {/* Row 2: Caps Lock + A-L + Enter */}
+              <div className="flex justify-center gap-1 sm:gap-1.5 md:gap-2">
+                {/* Caps Lock Key */}
+                <button
+                  type="button"
+                  onClick={() => handleKeyVirtualPress("CAPSLOCK")}
+                  className={`h-7 sm:h-10 px-2 sm:px-3 border-2 border-black flex items-center justify-center gap-1 font-space font-black text-[9px] sm:text-xs uppercase rounded-none transition-all duration-75 select-none active:bg-white active:text-black active:translate-x-[3px] active:translate-y-[3px] active:shadow-none ${pressedKeys.has("CAPSLOCK") || capsLockActive
+                    ? "bg-white text-black translate-x-[3px] translate-y-[3px] shadow-none"
+                    : "bg-neo-yellow text-black shadow-[2px_2px_0px_0px_#000] dark:shadow-[2px_2px_0px_0px_#fff] cursor-pointer hover:-translate-y-0.5 hover:shadow-[2px_3px_0px_0px_#000] dark:hover:shadow-[2px_3px_0px_0px_#fff]"
+                  }`}
+                >
+                  Caps
+                  <span className={`w-1.5 h-1.5 rounded-full border border-black ${capsLockActive ? "bg-red-500 animate-pulse" : "bg-zinc-400"}`} />
+                </button>
+
+                {["A", "S", "D", "F", "G", "H", "J", "K", "L"].map((key) => {
+                  const isPressed = pressedKeys.has(key);
+                  const baseColor = getKeyColor(key);
+                  return (
+                    <button
+                      key={key}
+                      type="button"
+                      onClick={() => handleKeyVirtualPress(key)}
+                      className={`w-7 h-7 sm:w-10 sm:h-10 border-2 border-black flex items-center justify-center font-space font-black text-xs sm:text-sm rounded-none transition-all duration-75 select-none active:bg-white active:text-black active:translate-x-[3px] active:translate-y-[3px] active:shadow-none ${isPressed
+                        ? "bg-white text-black translate-x-[3px] translate-y-[3px] shadow-none"
+                        : `${baseColor} shadow-[2px_2px_0px_0px_#000] dark:shadow-[2px_2px_0px_0px_#fff] cursor-pointer hover:-translate-y-0.5 hover:shadow-[2px_3px_0px_0px_#000] dark:hover:shadow-[2px_3px_0px_0px_#fff]`
+                      }`}
+                    >
+                      {key}
+                    </button>
+                  );
+                })}
+
+                {/* Enter Key */}
+                <button
+                  type="button"
+                  onClick={() => handleKeyVirtualPress("ENTER")}
+                  className={`h-7 sm:h-10 px-2 sm:px-3 border-2 border-black flex items-center justify-center font-space font-black text-[10px] sm:text-xs uppercase rounded-none transition-all duration-75 select-none active:bg-white active:text-black active:translate-x-[3px] active:translate-y-[3px] active:shadow-none ${pressedKeys.has("ENTER")
+                    ? "bg-white text-black translate-x-[3px] translate-y-[3px] shadow-none"
+                    : "bg-neo-blue text-black shadow-[2px_2px_0px_0px_#000] dark:shadow-[2px_2px_0px_0px_#fff] cursor-pointer hover:-translate-y-0.5 hover:shadow-[2px_3px_0px_0px_#000] dark:hover:shadow-[2px_3px_0px_0px_#fff]"
+                  }`}
+                >
+                  ⏎
+                </button>
+              </div>
+
+              {/* Row 3: Z-M */}
+              <div className="flex justify-center gap-1 sm:gap-1.5 md:gap-2">
+                {["Z", "X", "C", "V", "B", "N", "M"].map((key) => {
+                  const isPressed = pressedKeys.has(key);
+                  const baseColor = getKeyColor(key);
+                  return (
+                    <button
+                      key={key}
+                      type="button"
+                      onClick={() => handleKeyVirtualPress(key)}
+                      className={`w-7 h-7 sm:w-10 sm:h-10 border-2 border-black flex items-center justify-center font-space font-black text-xs sm:text-sm rounded-none transition-all duration-75 select-none active:bg-white active:text-black active:translate-x-[3px] active:translate-y-[3px] active:shadow-none ${isPressed
+                        ? "bg-white text-black translate-x-[3px] translate-y-[3px] shadow-none"
+                        : `${baseColor} shadow-[2px_2px_0px_0px_#000] dark:shadow-[2px_2px_0px_0px_#fff] cursor-pointer hover:-translate-y-0.5 hover:shadow-[2px_3px_0px_0px_#000] dark:hover:shadow-[2px_3px_0px_0px_#fff]`
+                      }`}
+                    >
+                      {key}
+                    </button>
+                  );
+                })}
+              </div>
 
               {/* Spacebar Row */}
               <div className="flex justify-center gap-2 pt-1">
-                <div
-                  className={`h-7 sm:h-10 w-40 sm:w-60 border-2 border-black flex items-center justify-center font-space font-black text-xs uppercase rounded-none transition-all duration-75 select-none ${pressedKeys.has("SPACE")
+                <button
+                  type="button"
+                  onClick={() => handleKeyVirtualPress("SPACE")}
+                  className={`h-7 sm:h-10 w-40 sm:w-60 border-2 border-black flex items-center justify-center font-space font-black text-xs uppercase rounded-none transition-all duration-75 select-none active:bg-white active:text-black active:translate-x-[3px] active:translate-y-[3px] active:shadow-none ${pressedKeys.has("SPACE")
                     ? "bg-white text-black translate-x-[3px] translate-y-[3px] shadow-none"
-                    : "bg-neo-orange text-black shadow-[2px_2px_0px_0px_#000] dark:shadow-[2px_2px_0px_0px_#fff]"
+                    : "bg-neo-orange text-black shadow-[2px_2px_0px_0px_#000] dark:shadow-[2px_2px_0px_0px_#fff] cursor-pointer hover:-translate-y-0.5 hover:shadow-[2px_3px_0px_0px_#000] dark:hover:shadow-[2px_3px_0px_0px_#fff]"
                   }`}
                 >
                   SPACEBAR
-                </div>
+                </button>
               </div>
             </div>
           </div>

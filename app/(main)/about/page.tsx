@@ -317,7 +317,7 @@ export default function AboutPage() {
 
         {/* Certificates Section */}
         {certificates.length > 0 && (
-          <div className="mt-16 space-y-8">
+          <div id="certificates" className="mt-16 space-y-8">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-neo-yellow text-black neo-border shadow-neo flex items-center justify-center">
                 <Award className="w-5 h-5" />
@@ -427,9 +427,13 @@ export default function AboutPage() {
             </div>
 
             {/* Description */}
+            {/* Description */}
             {selectedCert.description && (
-              <div className="border-l-4 border-black dark:border-white bg-zinc-50 dark:bg-zinc-800 px-4 py-3">
-                <p className="font-sans text-sm text-zinc-700 dark:text-zinc-300 leading-relaxed">
+              <div className="border-4 border-black dark:border-white bg-[#F4F3EF] dark:bg-zinc-800 p-4 shadow-neo-sm space-y-2">
+                <span className="font-space font-black text-[10px] tracking-wider uppercase bg-black text-white dark:bg-white dark:text-black px-2 py-0.5 inline-block">
+                  Description
+                </span>
+                <p className="font-sans font-semibold text-sm text-zinc-800 dark:text-zinc-200 leading-relaxed">
                   {selectedCert.description}
                 </p>
               </div>

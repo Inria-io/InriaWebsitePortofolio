@@ -8,6 +8,8 @@ export interface Project {
   image_url?: string;
   github_url?: string;
   live_url?: string;
+  report_url?: string;
+  report_title?: string;
   tags: string[];
   featured: boolean;
 }
