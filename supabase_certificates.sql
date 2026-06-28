@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS certificates (
   title TEXT NOT NULL,
   issuer TEXT NOT NULL,
   date TEXT NOT NULL,
+  description TEXT,
   image_url TEXT,
   credential_url TEXT,
   color TEXT NOT NULL DEFAULT 'bg-neo-yellow',
@@ -31,12 +32,13 @@ CREATE POLICY "Allow admin write access" ON certificates
 GRANT SELECT ON TABLE public.certificates TO anon, authenticated;
 
 -- 2. Seed Data (3 certificates example)
-INSERT INTO certificates (title, issuer, date, image_url, credential_url, color, order_index)
+INSERT INTO certificates (title, issuer, date, description, image_url, credential_url, color, order_index)
 VALUES
   (
     'Data Science Professional Certificate',
     'Digital Skola',
     '2024',
+    'A comprehensive program covering Python for Data Science, Exploratory Data Analysis, Machine Learning, and Big Query database manipulation.',
     NULL,
     'https://example.com',
     'bg-neo-yellow',
@@ -46,6 +48,7 @@ VALUES
     'Automation & QA Engineering',
     'Innovate Tech Labs',
     '2023',
+    'Intensive training focused on automation frameworks using Selenium, Jest, and integration testing pipelines.',
     NULL,
     'https://example.com',
     'bg-neo-blue',
@@ -55,6 +58,7 @@ VALUES
     'Digital Literacy & Community Empowerment',
     'Social Action Hub',
     '2022',
+    'Volunteering program aimed at teaching essential computer literacy skills and online safety to underserved communities.',
     NULL,
     'https://example.com',
     'bg-neo-pink',

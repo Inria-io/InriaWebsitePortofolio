@@ -18,6 +18,7 @@ const fallbackCertificates: Certificate[] = [
     title: "Data Science Professional Certificate",
     issuer: "Digital Skola",
     date: "2024",
+    description: "A comprehensive program covering Python for Data Science, Exploratory Data Analysis, Machine Learning, and Big Query database manipulation.",
     color: "bg-neo-yellow",
     credential_url: "#",
     order_index: 1,
@@ -28,6 +29,7 @@ const fallbackCertificates: Certificate[] = [
     title: "Automation & QA Engineering",
     issuer: "Innovate Tech Labs",
     date: "2023",
+    description: "Intensive training focused on automation frameworks using Selenium, Jest, and integration testing pipelines.",
     color: "bg-neo-blue",
     credential_url: "#",
     order_index: 2,
@@ -38,6 +40,7 @@ const fallbackCertificates: Certificate[] = [
     title: "Digital Literacy & Community Empowerment",
     issuer: "Social Action Hub",
     date: "2022",
+    description: "Volunteering program aimed at teaching essential computer literacy skills and online safety to underserved communities.",
     color: "bg-neo-pink",
     credential_url: "#",
     order_index: 3,
@@ -404,6 +407,15 @@ export default function AboutPage() {
                 <X className="w-5 h-5" />
               </button>
             </div>
+
+            {/* Description */}
+            {selectedCert.description && (
+              <div className="border-l-4 border-black dark:border-white bg-zinc-50 dark:bg-zinc-800 px-4 py-3">
+                <p className="font-sans text-sm text-zinc-700 dark:text-zinc-300 leading-relaxed">
+                  {selectedCert.description}
+                </p>
+              </div>
+            )}
 
             {/* Certificate Image Preview */}
             <div className="w-full border-4 border-black dark:border-zinc-750 overflow-hidden bg-zinc-100 dark:bg-zinc-800 p-2 flex items-center justify-center min-h-[220px]">

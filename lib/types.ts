@@ -76,6 +76,7 @@ export interface Certificate {
   title: string;
   issuer: string;
   date: string;
+  description?: string;
   image_url?: string;
   credential_url?: string;
   color: string;
