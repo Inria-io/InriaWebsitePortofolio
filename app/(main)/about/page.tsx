@@ -164,7 +164,7 @@ export default function AboutPage() {
                 />
               </div>
               <div className="pt-4 pb-1 text-center font-space font-black uppercase text-sm text-black">
-                NAMAKU.PNG
+                InriaKalalo.PNG
               </div>
             </motion.div>
           </div>
@@ -196,6 +196,60 @@ export default function AboutPage() {
           </Card>
 
         </div>
+        {/* Certificates Section */}
+        {certificates.length > 0 && (
+          <div id="certificates" className="mb-16 space-y-8">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-neo-yellow text-black neo-border shadow-neo flex items-center justify-center">
+                <Award className="w-5 h-5" />
+              </div>
+              <h2 className="font-space font-black text-2xl md:text-3xl uppercase tracking-tight">
+                CERTIFICATES
+              </h2>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {certificates.map((cert, idx) => (
+                <Card
+                  key={cert.id || idx}
+                  onClick={() => setSelectedCert(cert)}
+                  className="border-4 border-black bg-white dark:bg-zinc-900 p-6 shadow-neo flex flex-col justify-between hover:translate-y-[-6px] hover:shadow-neo-lg transition-all duration-200 cursor-pointer"
+                >
+                  <div className="space-y-4">
+                    <div className="flex justify-between items-start">
+                      <div className={`w-10 h-10 ${cert.color || "bg-neo-yellow"} border-2 border-black flex items-center justify-center shadow-neo-sm`}>
+                        <Award className="w-5 h-5 text-black" />
+                      </div>
+                      {cert.image_url && (
+                        <span className="text-[9px] font-space font-black uppercase bg-neo-green text-black border-2 border-black px-1.5 py-0.5 shadow-neo-sm animate-pulse">
+                          PREVIEW
+                        </span>
+                      )}
+                    </div>
+                    <div>
+                      <span className="font-space font-black text-xs uppercase bg-black text-white px-2 py-0.5 border border-black shadow-neo-sm inline-block mb-2">
+                        {cert.date}
+                      </span>
+                      <h3 className="font-space font-black text-lg uppercase leading-tight text-black dark:text-white">
+                        {cert.title}
+                      </h3>
+                      <p className="font-sans font-black text-xs text-zinc-500 uppercase mt-1">
+                        {cert.issuer}
+                      </p>
+                    </div>
+                  </div>
+                  {cert.credential_url && cert.credential_url !== "#" && (
+                    <div className="pt-4 mt-4 border-t-2 border-dashed border-zinc-200 dark:border-zinc-800">
+                      <span className="inline-flex items-center gap-1 text-xs font-space font-black uppercase text-neo-blue hover:underline">
+                        Verify Credential &rarr;
+                      </span>
+                    </div>
+                  )}
+                </Card>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Core Values Section */}
         <div className="mb-16 space-y-8">
@@ -315,60 +369,7 @@ export default function AboutPage() {
           </div>
         </div>
 
-        {/* Certificates Section */}
-        {certificates.length > 0 && (
-          <div id="certificates" className="mt-16 space-y-8">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-neo-yellow text-black neo-border shadow-neo flex items-center justify-center">
-                <Award className="w-5 h-5" />
-              </div>
-              <h2 className="font-space font-black text-2xl md:text-3xl uppercase tracking-tight">
-                CERTIFICATES
-              </h2>
-            </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {certificates.map((cert, idx) => (
-                <Card
-                  key={cert.id || idx}
-                  onClick={() => setSelectedCert(cert)}
-                  className="border-4 border-black bg-white dark:bg-zinc-900 p-6 shadow-neo flex flex-col justify-between hover:translate-y-[-6px] hover:shadow-neo-lg transition-all duration-200 cursor-pointer"
-                >
-                  <div className="space-y-4">
-                    <div className="flex justify-between items-start">
-                      <div className={`w-10 h-10 ${cert.color || "bg-neo-yellow"} border-2 border-black flex items-center justify-center shadow-neo-sm`}>
-                        <Award className="w-5 h-5 text-black" />
-                      </div>
-                      {cert.image_url && (
-                        <span className="text-[9px] font-space font-black uppercase bg-neo-green text-black border-2 border-black px-1.5 py-0.5 shadow-neo-sm animate-pulse">
-                          PREVIEW
-                        </span>
-                      )}
-                    </div>
-                    <div>
-                      <span className="font-space font-black text-xs uppercase bg-black text-white px-2 py-0.5 border border-black shadow-neo-sm inline-block mb-2">
-                        {cert.date}
-                      </span>
-                      <h3 className="font-space font-black text-lg uppercase leading-tight text-black dark:text-white">
-                        {cert.title}
-                      </h3>
-                      <p className="font-sans font-black text-xs text-zinc-500 uppercase mt-1">
-                        {cert.issuer}
-                      </p>
-                    </div>
-                  </div>
-                  {cert.credential_url && cert.credential_url !== "#" && (
-                    <div className="pt-4 mt-4 border-t-2 border-dashed border-zinc-200 dark:border-zinc-800">
-                      <span className="inline-flex items-center gap-1 text-xs font-space font-black uppercase text-neo-blue hover:underline">
-                        Verify Credential &rarr;
-                      </span>
-                    </div>
-                  )}
-                </Card>
-              ))}
-            </div>
-          </div>
-        )}
 
         {/* Interests Section */}
         <div className="mt-16 space-y-8">
