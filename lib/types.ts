@@ -97,3 +97,17 @@ export interface TimelineRecord {
   order_index?: number;
 }
 
+export interface Achievement {
+  id: string;
+  created_at: string;
+  title: string;
+  issuer: string;
+  date: string;
+  description?: string;
+  color: string;
+  image_url?: string;
+  link_url?: string;
+  order_index: number;
+}
+
+

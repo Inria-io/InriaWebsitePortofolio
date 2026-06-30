@@ -2,14 +2,14 @@
 
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { User, Briefcase, GraduationCap, FileText, Award, Heart, Sparkles, Shield, X, ExternalLink, Rocket, RotateCw, TrendingUp } from "lucide-react";
+import { User, Briefcase, GraduationCap, FileText, Award, Heart, Sparkles, Shield, X, ExternalLink, Rocket, RotateCw, TrendingUp, Trophy } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Interests } from "@/components/sections/interests";
 import { createClient } from "@/lib/supabase/client";
 import { AboutBackground } from "@/components/sections/bg-animations";
-import { Certificate, TimelineRecord } from "@/lib/types";
+import { Certificate, TimelineRecord, Achievement } from "@/lib/types";
 
 const fallbackCertificates: Certificate[] = [
   {
@@ -77,10 +77,37 @@ const fallbackTimeline: TimelineRecord[] = [
   },
 ];
 
+const fallbackAchievements: Achievement[] = [
+  {
+    id: "fb-ach-1",
+    created_at: "",
+    title: "1st Place - Digital Forensics CTF",
+    issuer: "IndoSec & Universitas Negeri",
+    date: "2024",
+    description: "Won first place in the National Capture The Flag (CTF) competition, solving challenges related to memory dump analysis, network logs, and registry analysis.",
+    color: "bg-neo-green",
+    link_url: "#",
+    order_index: 1,
+  },
+  {
+    id: "fb-ach-2",
+    created_at: "",
+    title: "Top 5 Hackathon Winner",
+    issuer: "TechFest Indonesia",
+    date: "2023",
+    description: "Developed an AI-driven disaster response platform in under 48 hours, integrating Mapbox APIs and automated sms alerts.",
+    color: "bg-neo-blue",
+    link_url: "#",
+    order_index: 2,
+  },
+];
+
 export default function AboutPage() {
   const [certificates, setCertificates] = useState<Certificate[]>(fallbackCertificates);
   const [timeline, setTimeline] = useState<TimelineRecord[]>(fallbackTimeline);
+  const [achievements, setAchievements] = useState<Achievement[]>(fallbackAchievements);
   const [selectedCert, setSelectedCert] = useState<Certificate | null>(null);
+  const [selectedAch, setSelectedAch] = useState<Achievement | null>(null);
 
   useEffect(() => {
     async function fetchCertificates() {
@@ -118,8 +145,25 @@ export default function AboutPage() {
       }
     }
 
+    async function fetchAchievements() {
+      try {
+        const supabase = createClient();
+        const { data, error } = await supabase
+          .from("achievements")
+          .select("*")
+          .order("order_index", { ascending: true });
+
+        if (!error && data && data.length > 0) {
+          setAchievements(data as Achievement[]);
+        }
+      } catch (err) {
+        console.error("Failed to fetch achievements:", err);
+      }
+    }
+
     fetchCertificates();
     fetchTimeline();
+    fetchAchievements();
   }, []);
 
   return (
@@ -196,6 +240,118 @@ export default function AboutPage() {
           </Card>
 
         </div>
+        {/* Experience & Education Timeline */}
+        <div className="mb-16 space-y-8">
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-neo-pink text-black neo-border shadow-neo flex items-center justify-center">
+              <Briefcase className="w-5 h-5" />
+            </div>
+            <h2 className="font-space font-black text-2xl md:text-3xl uppercase tracking-tight">
+              TIMELINE
+            </h2>
+          </div>
+
+          <div className="relative border-l-4 border-black dark:border-white pl-6 sm:pl-8 ml-4 space-y-12">
+            {timeline.map((item, idx) => (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, x: -30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: idx * 0.1 }}
+                className="relative"
+              >
+                {/* Bullet */}
+                <div className="absolute -left-[38px] top-1.5 w-6 h-6 bg-white dark:bg-zinc-900 border-4 border-black dark:border-white rounded-full flex items-center justify-center shadow-neo-sm">
+                  {item.type === "work" ? (
+                    <Briefcase className="w-2.5 h-2.5 text-black dark:text-white" />
+                  ) : (
+                    <GraduationCap className="w-2.5 h-2.5 text-black dark:text-white" />
+                  )}
+                </div>
+
+                {/* Timeline Card */}
+                <Card bg={item.color} className="p-6 border-4 border-black shadow-neo text-black dark:text-black">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-3 gap-2">
+                    <span className="font-space font-black text-sm bg-white text-black border-2 border-black px-2 py-0.5 shadow-neo-sm inline-block self-start">
+                      {item.year}
+                    </span>
+                    <h3 className="font-space font-black text-lg uppercase leading-tight text-black dark:text-black">
+                      {item.title}
+                    </h3>
+                  </div>
+                  <h4 className="font-sans font-black text-sm uppercase text-black/85 dark:text-black/85 mb-3">
+                    {item.company}
+                  </h4>
+                  <p className="font-sans font-bold text-xs text-black/80 dark:text-black/80 leading-relaxed">
+                    {item.description}
+                  </p>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+
+        {/* Achievements Section */}
+        {achievements.length > 0 && (
+          <div id="achievements" className="mb-16 space-y-8">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-neo-orange text-black neo-border shadow-neo flex items-center justify-center">
+                <Trophy className="w-5 h-5" />
+              </div>
+              <h2 className="font-space font-black text-2xl md:text-3xl uppercase tracking-tight">
+                ACHIEVEMENTS
+              </h2>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {achievements.map((ach, idx) => (
+                <Card
+                  key={ach.id || idx}
+                  onClick={() => setSelectedAch(ach)}
+                  className="border-4 border-black bg-white dark:bg-zinc-900 p-6 shadow-neo flex flex-col justify-between hover:translate-y-[-6px] hover:shadow-neo-lg transition-all duration-200 cursor-pointer"
+                >
+                  <div className="space-y-4">
+                    <div className="flex justify-between items-start">
+                      <div className={`w-10 h-10 ${ach.color || "bg-neo-orange"} border-2 border-black flex items-center justify-center shadow-neo-sm`}>
+                        <Trophy className="w-5 h-5 text-black" />
+                      </div>
+                      {ach.image_url && (
+                        <span className="text-[9px] font-space font-black uppercase bg-neo-green text-black border-2 border-black px-1.5 py-0.5 shadow-neo-sm animate-pulse">
+                          PREVIEW
+                        </span>
+                      )}
+                    </div>
+                    <div>
+                      <span className="font-space font-black text-xs uppercase bg-black text-white px-2 py-0.5 border border-black shadow-neo-sm inline-block mb-2">
+                        {ach.date}
+                      </span>
+                      <h3 className="font-space font-black text-lg uppercase leading-tight text-black dark:text-white">
+                        {ach.title}
+                      </h3>
+                      <p className="font-sans font-black text-xs text-zinc-500 uppercase mt-1">
+                        {ach.issuer}
+                      </p>
+                      {ach.description && (
+                        <p className="font-sans font-semibold text-xs text-zinc-600 dark:text-zinc-400 mt-3 line-clamp-2">
+                          {ach.description}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                  {ach.link_url && ach.link_url !== "#" && (
+                    <div className="pt-4 mt-4 border-t-2 border-dashed border-zinc-200 dark:border-zinc-800">
+                      <span className="inline-flex items-center gap-1 text-xs font-space font-black uppercase text-neo-blue hover:underline">
+                        View Link &rarr;
+                      </span>
+                    </div>
+                  )}
+                </Card>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Certificates Section */}
         {certificates.length > 0 && (
           <div id="certificates" className="mb-16 space-y-8">
@@ -317,58 +473,6 @@ export default function AboutPage() {
           </div>
         </div>
 
-        {/* Experience & Education Timeline */}
-        <div className="space-y-8">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-neo-pink text-black neo-border shadow-neo flex items-center justify-center">
-              <Briefcase className="w-5 h-5" />
-            </div>
-            <h2 className="font-space font-black text-2xl md:text-3xl uppercase tracking-tight">
-              TIMELINE
-            </h2>
-          </div>
-
-          <div className="relative border-l-4 border-black dark:border-white pl-6 sm:pl-8 ml-4 space-y-12">
-            {timeline.map((item, idx) => (
-              <motion.div
-                key={idx}
-                initial={{ opacity: 0, x: -30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: idx * 0.1 }}
-                className="relative"
-              >
-                {/* Bullet */}
-                <div className="absolute -left-[38px] top-1.5 w-6 h-6 bg-white dark:bg-zinc-900 border-4 border-black dark:border-white rounded-full flex items-center justify-center shadow-neo-sm">
-                  {item.type === "work" ? (
-                    <Briefcase className="w-2.5 h-2.5 text-black dark:text-white" />
-                  ) : (
-                    <GraduationCap className="w-2.5 h-2.5 text-black dark:text-white" />
-                  )}
-                </div>
-
-                {/* Timeline Card */}
-                <Card bg={item.color} className="p-6 border-4 border-black shadow-neo text-black dark:text-black">
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-3 gap-2">
-                    <span className="font-space font-black text-sm bg-white text-black border-2 border-black px-2 py-0.5 shadow-neo-sm inline-block self-start">
-                      {item.year}
-                    </span>
-                    <h3 className="font-space font-black text-lg uppercase leading-tight text-black dark:text-black">
-                      {item.title}
-                    </h3>
-                  </div>
-                  <h4 className="font-sans font-black text-sm uppercase text-black/85 dark:text-black/85 mb-3">
-                    {item.company}
-                  </h4>
-                  <p className="font-sans font-bold text-xs text-black/80 dark:text-black/80 leading-relaxed">
-                    {item.description}
-                  </p>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-
 
 
         {/* Interests Section */}
@@ -458,6 +562,93 @@ export default function AboutPage() {
               <Button
                 variant="secondary"
                 onClick={() => setSelectedCert(null)}
+                className="w-full sm:w-auto"
+              >
+                Close
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+      {/* Achievement Detail Modal / Lightbox */}
+      {selectedAch && (
+        <div
+          className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4"
+          onClick={() => setSelectedAch(null)}
+        >
+          <div
+            className="bg-white dark:bg-zinc-900 border-4 border-black dark:border-white shadow-neo max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 flex flex-col space-y-4 text-black dark:text-white"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div className="flex justify-between items-start gap-4 border-b-4 border-black dark:border-zinc-700 pb-3">
+              <div>
+                <span className="font-space font-black text-xs uppercase bg-black text-white px-2 py-0.5 border border-black shadow-neo-sm inline-block mb-1">
+                  {selectedAch.date}
+                </span>
+                <h3 className="font-space font-black text-xl md:text-2xl uppercase leading-tight">
+                  {selectedAch.title}
+                </h3>
+                <p className="font-sans font-black text-xs text-zinc-500 uppercase mt-0.5">
+                  {selectedAch.issuer}
+                </p>
+              </div>
+              <button
+                onClick={() => setSelectedAch(null)}
+                className="p-1.5 bg-white dark:bg-zinc-800 text-black dark:text-white border-2 border-black dark:border-white shadow-neo-sm hover:translate-y-[-1px] active:translate-y-[1px] hover:bg-neo-pink dark:hover:bg-neo-pink dark:hover:text-black transition-all cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Achievement Image Preview */}
+            <div className="w-full border-4 border-black dark:border-zinc-750 overflow-hidden bg-zinc-100 dark:bg-zinc-800 p-2 flex items-center justify-center min-h-[220px]">
+              {selectedAch.image_url ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={selectedAch.image_url}
+                  alt={selectedAch.title}
+                  className="w-full h-auto object-contain max-h-[50vh] border-2 border-black dark:border-zinc-700 shadow-neo-sm"
+                />
+              ) : (
+                <div className="flex flex-col items-center justify-center font-space text-zinc-400 dark:text-zinc-500 p-8">
+                  <Trophy className="w-16 h-16 mb-2" />
+                  <span className="font-black text-sm uppercase">No preview image available</span>
+                  <span className="text-xs mt-1 text-zinc-500">Add image_url in Supabase to show achievement image</span>
+                </div>
+              )}
+            </div>
+
+            {/* Description */}
+            {selectedAch.description && (
+              <div className="border-4 border-black dark:border-white bg-[#F4F3EF] dark:bg-zinc-800 p-4 shadow-neo-sm space-y-2">
+                <span className="font-space font-black text-[10px] tracking-wider uppercase bg-black text-white dark:bg-white dark:text-black px-2 py-0.5 inline-block">
+                  Description
+                </span>
+                <p className="font-sans font-semibold text-sm text-zinc-800 dark:text-zinc-200 leading-relaxed">
+                  {selectedAch.description}
+                </p>
+              </div>
+            )}
+
+            {/* Modal Footer/Actions */}
+            <div className="flex flex-col sm:flex-row gap-3 pt-3 border-t-2 border-dashed border-zinc-200 dark:border-zinc-800 justify-end">
+              {selectedAch.link_url && selectedAch.link_url !== "#" && (
+                <a
+                  href={selectedAch.link_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full sm:w-auto"
+                >
+                  <Button className="w-full flex items-center justify-center gap-1.5">
+                    <ExternalLink className="w-4 h-4 text-black" />
+                    Verify Achievement
+                  </Button>
+                </a>
+              )}
+              <Button
+                variant="secondary"
+                onClick={() => setSelectedAch(null)}
                 className="w-full sm:w-auto"
               >
                 Close
