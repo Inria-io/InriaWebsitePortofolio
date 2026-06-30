@@ -20,6 +20,9 @@ CREATE POLICY "Allow public read access on achievements"
 ON achievements FOR SELECT 
 USING (true);
 
+-- Grant permissions to API roles (anon & authenticated)
+GRANT SELECT ON TABLE public.achievements TO anon, authenticated;
+
 -- Insert fallback/example data
 INSERT INTO achievements (title, issuer, date, description, color, link_url, order_index)
 VALUES 
